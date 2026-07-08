@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ellie the Magician</title>
+<style>
+  :root {
+    --bg:#f6f7fb; --card:#fff; --ink:#1f2430; --muted:#6b7280; --line:#e6e8ef;
+    --high:#e11d48; --med:#d97706; --low:#2563eb;
+    --wait:#6b7280; --work:#7c3aed; --done:#16a34a; --stuck:#dc2626; --ok:#0891b2;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif; }
+  header { padding:20px 24px; background:linear-gradient(135deg,#6d28d9,#2563eb); color:#fff; }
+  header h1 { margin:0; font-size:22px; }
+  header p { margin:4px 0 0; opacity:.9; font-size:13px; }
+  .wrap { max-width:920px; margin:0 auto; padding:20px 16px 60px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:16px 18px; margin-bottom:18px; }
+  h2 { font-size:15px; margin:0 0 12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  label { display:block; font-size:13px; color:var(--muted); margin:10px 0 4px; }
+  input, textarea, select {
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px;
+    font:inherit; background:#fff; }
+  textarea { resize:vertical; min-height:60px; }
+  .row { display:flex; gap:12px; }
+  .row > div { flex:1; }
+  button { cursor:pointer; border:0; border-radius:8px; padding:9px 16px;
+    font:inherit; font-weight:600; background:#6d28d9; color:#fff; }
+  button.ghost { background:#eef; color:#3730a3; }
+  button.yes { background:var(--done); }
+  button.no  { background:var(--stuck); }
+  .job { border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:10px; }
+  .job .top { display:flex; align-items:center; gap:8px; }
+  .job h3 { margin:0; font-size:15px; flex:1; }
+  .badge { font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; color:#fff; }
+  .desc { color:var(--muted); font-size:14px; margin:6px 0 0; white-space:pre-wrap; }
+  .result { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:8px 10px;
+    margin-top:8px; font-size:14px; white-space:pre-wrap; }
+  .stuckbox { background:#fef2f2; border:1px solid #fecaca; }
+  .pri { font-size:11px; font-weight:700; padding:2px 7px; border-radius:6px; }
+  .actions { margin-top:10px; display:flex; gap:8px; }
+  .log { font-size:13px; }
+  .log div { padding:5px 0; border-bottom:1px dashed var(--line); color:var(--muted); }
+  .log b { color:var(--ink); }
+  .empty { color:var(--muted); font-style:italic; }
+  .msg { font-size:13px; margin-top:8px; min-height:16px; }
+  .dot { width:8px; height:8px; border-radius:50%; background:var(--done); display:inline-block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🪄 Ellie the Magician</h1>
+  <p><span class="dot"></span> Your personal bot — checking for jobs every 1 hour · away hours 8am–9pm</p>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>Add a job</h2>
+    <label>Title</label>
+    <input id="title" placeholder="e.g. Draft observation feedback for Ms. Khan" />
+    <label>Description (plain words — what do you want?)</label>
+    <textarea id="description" placeholder="Say what you need. The more detail, the better."></textarea>
+    <div class="row">
+      <div>
+        <label>How important?</label>
+        <select id="priority">
+          <option>High</option>
+          <option selected>Medium</option>
+          <option>Low</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button onclick="addJob()">Add job</button>
+      </div>
+    </div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2>My jobs</h2>
+    <div id="jobs"><p class="empty">Loading…</p></div>
+  </div>
+
+  <div class="card">
+    <h2>What Ellie's been doing (log)</h2>
+    <div class="log" id="log"><p class="empty">Nothing yet.</p></div>
+  </div>
+
+</div>
+
+<script>
+const BADGE = {
+  waiting:{t:"waiting", c:"#6b7280"}, working:{t:"working on it", c:"#7c3aed"},
+  done:{t:"done", c:"#16a34a"}, stuck:{t:"stuck", c:"#dc2626"},
+  "needs-ok":{t:"needs my OK", c:"#0891b2"},
+};
+const PRI = { High:"#e11d48", Medium:"#d97706", Low:"#2563eb" };
+
+async function load() {
+  const s = await (await fetch("/api/state")).json();
+  renderJobs(s.tasks || []);
+  renderLog(s.log || []);
+}
+
+function esc(x){ return (x||"").replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function renderJobs(tasks) {
+  const el = document.getElementById("jobs");
+  if (!tasks.length) { el.innerHTML = '<p class="empty">No jobs yet. Add one above ↑</p>'; return; }
+  el.innerHTML = tasks.map(t => {
+    const b = BADGE[t.status] || BADGE.waiting;
+    let extra = "";
+    if (t.result) extra += `<div class="result"><b>Ellie:</b> ${esc(t.result)}</div>`;
+    if (t.status === "stuck" && t.reason) extra += `<div class="result stuckbox"><b>Stuck:</b> ${esc(t.reason)}</div>`;
+    let actions = "";
+    if (t.status === "needs-ok") {
+      actions = `<div class="actions">
+        <button class="yes" onclick="decide('${t.id}','yes')">✓ Yes, go ahead</button>
+        <button class="no" onclick="decide('${t.id}','no')">✗ No</button></div>`;
+    }
+    if (t.note) extra += `<div class="result" style="background:#eff6ff;border-color:#bfdbfe"><b>Your note:</b> ${esc(t.note)}</div>`;
+    const noteBox = `<div class="actions" style="gap:6px">
+        <input id="n_${t.id}" placeholder="Leave a note or correction (e.g. 'I meant Grade 5, not 6')" style="flex:1" />
+        <button class="ghost" onclick="saveNote('${t.id}')">Save note</button></div>`;
+    return `<div class="job">
+      <div class="top">
+        <h3>${esc(t.title)}</h3>
+        <span class="pri" style="background:${PRI[t.priority]}22;color:${PRI[t.priority]}">${t.priority}</span>
+        <span class="badge" style="background:${b.c}">${b.t}</span>
+      </div>
+      ${t.description ? `<div class="desc">${esc(t.description)}</div>` : ""}
+      ${extra}${actions}${noteBox}
+    </div>`;
+  }).join("");
+}
+
+function renderLog(log) {
+  const el = document.getElementById("log");
+  if (!log.length) { el.innerHTML = '<p class="empty">Nothing yet.</p>'; return; }
+  el.innerHTML = log.slice(0,40).map(l => {
+    const t = new Date(l.when).toLocaleString();
+    return `<div><b>${l.how}</b> — ${esc(l.what)} <span style="float:right">${t}</span></div>`;
+  }).join("");
+}
+
+async function addJob() {
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const priority = document.getElementById("priority").value;
+  const msg = document.getElementById("msg");
+  if (!title.trim()) { msg.textContent = "Please add a title."; return; }
+  const r = await fetch("/api/tasks", { method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ title, description, priority }) });
+  if (r.ok) {
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    msg.textContent = "Added ✓ Ellie will pick it up on her next round.";
+    load();
+  } else { msg.textContent = "Something went wrong adding that job."; }
+}
+
+async function decide(id, decision) {
+  await fetch("/api/decision", { method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ id, decision }) });
+  load();
+}
+
+async function saveNote(id) {
+  const box = document.getElementById("n_" + id);
+  const note = box.value.trim();
+  if (!note) return;
+  await fetch("/api/note", { method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ id, note }) });
+  box.value = "";
+  load();
+}
+
+load();
+setInterval(load, 4000); // keep the page fresh
+</script>
+</body>
+</html>

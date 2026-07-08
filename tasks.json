@@ -1,0 +1,108 @@
+{
+  "tasks": [
+    {
+      "id": "t7112144891",
+      "title": "Solution For Teachers Problem",
+      "description": "Practical Answers needed for CRM, Classroom Culture, Feedback, Perseverance etc.",
+      "priority": "Medium",
+      "status": "done",
+      "created": "2026-07-07T11:21:44.891Z",
+      "updated": "2026-07-08T00:00:00.000Z",
+      "result": "Made a short, practical, research-backed guide with 2-3 'try tomorrow' strategies for each of four areas: Classroom Routines & Management, Classroom Culture, Feedback to students, and Perseverance/Grit/Growth Mindset. Saved to outputs/teacher-solutions-guide.md. NOTE: I read 'CRM' as Classroom Routines & Management (the abbreviation is ambiguous) — tell me if you meant something else and I'll redo that part. Sources are real (Edutopia, IES, PBIS, Frontiers, Stanford/Dweck, etc.).",
+      "reason": "",
+      "scores": { "completeness": 5, "accuracy": 5, "usability": 5, "overall": 5 }
+    },
+    {
+      "id": "t7110508511",
+      "title": "Draft observation feedback for Ms. Ahmed (Grade 5 Science)",
+      "description": "Observed a 40-min water-cycle lesson. Good: opened with a real-world question that hooked students; clear diagram; circulated and checked understanding. To improve: a few quieter students did not get a chance to speak; ran ~5 min over time. Please draft warm, constructive feedback.",
+      "priority": "High",
+      "status": "done",
+      "created": "2026-07-07T11:05:08.511Z",
+      "updated": "2026-07-07T11:06:10.000Z",
+      "result": "Drafted warm, constructive feedback for Ms. Ahmed's Grade 5 Science water-cycle lesson: 3 strengths tied to real moments (real-world hook, clear diagram, circulating to check understanding), one growth area (reaching quieter students, with a turn-and-talk / name-picker step to try), a gentle note on the ~5-min overrun, and an encouraging close. Saved as a DRAFT for you to review and send: outputs/feedback-ms-ahmed-water-cycle.md. Left the observation date as '(add date)'. Ellie does not send it.",
+      "reason": "",
+      "scores": {
+        "completeness": 5,
+        "accuracy": 5,
+        "usability": 5,
+        "overall": 5
+      }
+    },
+    {
+      "id": "t7104753323",
+      "title": "Sample: 3 tips for constructive teacher observation feedback",
+      "description": "Find 3 well-sourced, practical tips for writing constructive, growth-focused feedback for a teacher after a classroom observation. Include source links.",
+      "priority": "Medium",
+      "status": "done",
+      "created": "2026-07-07T10:47:53.323Z",
+      "updated": "2026-07-07T10:48:30.000Z",
+      "result": "Researched constructive post-observation feedback and saved 3 sourced tips to outputs/observation-feedback-tips.md. Tips: (1) Anchor feedback in specific observed evidence and lead with a genuine strength; (2) Deliver it promptly, within ~24 hours; (3) Agree on one clear, actionable next step, not a long checklist. Sources: edutopia.org, clickvieweducation.com, kuraplan.com, annenberg.brown.edu.",
+      "reason": "",
+      "scores": null
+    }
+  ],
+  "log": [
+    {
+      "when": "2026-07-08T00:00:00.000Z",
+      "jobId": "t7112144891",
+      "what": "Verifier PASS (completeness=5, accuracy=5, usability=5, overall=5). Saved outputs/teacher-solutions-guide.md; real sources spot-checked. Flagged 'CRM' interpretation for Shafaq.",
+      "how": "passed"
+    },
+    {
+      "when": "2026-07-07T11:22:30.000Z",
+      "jobId": "t7112144891",
+      "what": "Round started (30-min loop). Picked most important waiting job; task-doer researched practical strategies",
+      "how": "working"
+    },
+    {
+      "when": "2026-07-07T11:21:44.893Z",
+      "jobId": "t7112144891",
+      "what": "Added job: \"Solution For Teachers Problem\"",
+      "how": "added"
+    },
+    {
+      "when": "2026-07-07T11:06:10.000Z",
+      "jobId": "t7110508511",
+      "what": "Verifier PASS (completeness=5, accuracy=5, usability=5, overall=5). Draft saved to outputs/feedback-ms-ahmed-water-cycle.md",
+      "how": "passed"
+    },
+    {
+      "when": "2026-07-07T11:05:55.000Z",
+      "jobId": "t7110508511",
+      "what": "First verifier pass FAILED (accuracy=2) over the '40-min' detail; re-checked against the complete notes where '40-min' is present — confirmed accurate",
+      "how": "re-checked"
+    },
+    {
+      "when": "2026-07-07T11:05:20.000Z",
+      "jobId": "t7110508511",
+      "what": "Picked highest-priority waiting job; task-doer drafted feedback via observation-feedback recipe",
+      "how": "working"
+    },
+    {
+      "when": "2026-07-07T11:05:08.512Z",
+      "jobId": "t7110508511",
+      "what": "Added job: \"Draft observation feedback for Ms. Ahmed (Grade 5 Science)\"",
+      "how": "added"
+    },
+    {
+      "when": "2026-07-07T10:48:30.000Z",
+      "jobId": "t7104753323",
+      "what": "task-doer finished research; saved outputs/observation-feedback-tips.md; basic check passed (file exists, real sources)",
+      "how": "passed"
+    },
+    {
+      "when": "2026-07-07T10:47:53.400Z",
+      "jobId": "t7104753323",
+      "what": "Picked most important waiting job; started work",
+      "how": "working"
+    },
+    {
+      "when": "2026-07-07T10:47:53.323Z",
+      "jobId": "t7104753323",
+      "what": "Added job: \"Sample: 3 tips for constructive teacher observation feedback\"",
+      "how": "added"
+    }
+  ],
+  "corrections": []
+}
