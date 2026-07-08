@@ -24,9 +24,9 @@ On it you can:
 
 > **run one round of Ellie's work in the my-bot folder**
 
-…or, to keep her working every hour automatically while Claude Code is open, use the loop:
+…or, to keep her working every half hour automatically while Claude Code is open, use the loop:
 
-> **/loop 1h run one round of Ellie's work in the my-bot folder**
+> **/loop 30m run one round of Ellie's work in the my-bot folder**
 
 Each round, Ellie picks the most important waiting job, does it, has a second helper check
 it, writes a note, and updates the log. Away-mode (background schedule) is **off** by your
@@ -64,8 +64,8 @@ intentions.
 
 ## A note on cost
 The web page is free to keep open. The only thing that costs anything is **Ellie doing a
-round** (that's Claude working). She runs a round every hour only while Claude Code is open —
-so cost stays small and in your control.
+round** (that's Claude working). She runs a round every half hour only while Claude Code is
+open — so cost stays small and in your control.
 
 ## If something looks wrong
 - **Page won't open?** The little back-end may have stopped. Ask Claude Code: *"start Ellie's
