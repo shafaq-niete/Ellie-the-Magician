@@ -44,6 +44,12 @@
   ],
   "log": [
     {
+      "when": "2026-07-16T12:05:00.000Z",
+      "jobId": "-",
+      "what": "notes-folder hook fired on save of notes/2026-07-16-quick-note.md; re-ran Daily Wrap-Up (updated log/2026-07-16-wrap-up.md with today's note)",
+      "how": "wrap-up"
+    },
+    {
       "when": "2026-07-16T12:00:00.000Z",
       "jobId": "-",
       "what": "Daily Wrap-Up written to log/2026-07-16-wrap-up.md (quiet day — nothing added/done/waiting today)",
